@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Watson's Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-text">
+     <h1>
+      <span style="font-size: 30px; font-weight: normal; position: relative; top: -20px;">
+        The Blog of
+      </span>
+      <span style="margin-left: 20px; font-size: 48px; font-weight: bold; font-family: Impact, 'Brush Script MT', cursive; color: #e6005c; text-shadow: 2px 2px 5px black; letter-spacing: 2px;">
+        Mr. Kunal V. Dharme
+      </span>
+    </h1>
+    <p style="margin-top: 13px; font-family: 'Brush Script MT', cursive; font-size: 22px; color: #ffffff;">
+  From the Science of Digital Deduction
+</p>
+
+    </div>
+    <div class="logo-container">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+    </div>
+  </header>
+  <nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="blog.html">Study In Pink</a></li>
+    <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+  <div class="container">
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='images/kunal.jpg') }}" class="profile-img" alt="Dr. Watson">
+      <h2>Mr. Kunal V. Dharme</h2>
+      <p>Doctor. Soldier. Blogger. Flatmate to a genius.</p>
+    </aside>
+
+    <main class="blog-posts">
+      <article>
+        <h2><a href="blog.html">A Study in Pink</a></h2>
+        <p class="date">January 14, 2010</p>
+        <p>First case with Sherlock Holmes. Four suicides, all linked. A serial killer who forces victims to choose...</p>
+      </article>
+      <article>
+        <h2><a href="blog.html">The Blind Banker</a></h2>
+        <p class="date">January 21, 2010</p>
+        <p>Sherlock's contacted by an old friend from uni. Weird symbols appear on a flat wall. Murder, smuggling, and...</p>
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
+  </footer>
+</body>
+</html>

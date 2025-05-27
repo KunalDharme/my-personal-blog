@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Blog Posts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.7);
+    }
+
+    h2 {
+      color: #00ff99;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ff99;
+    }
+
+    a {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #00ff99;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #00cc77;
+      text-shadow: 0 0 5px #00cc77;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    ul li {
+      background-color: #292929;
+      margin-bottom: 10px;
+      padding: 12px 15px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #eee;
+      box-shadow: 0 0 5px rgba(0, 255, 153, 0.4);
+    }
+
+    ul li strong {
+      color: #00ff99;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>All Blog Posts</h2>
+    <a href="{{ url_for('admin.new_post') }}">+ New Post</a>
+    <ul>
+      {% for post in posts %}
+        <li>
+          <strong>{{ post.title }}</strong> — {{ post.created_at.strftime('%Y-%m-%d') }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>

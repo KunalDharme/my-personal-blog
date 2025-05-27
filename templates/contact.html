@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact - Mr. Kunal V. Dharme's Blog</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px;
+      margin: 15px 0;
+      border: 1px solid #c3e6cb;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
+    <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
+    <p>The Science of Digital Deduction</p>
+  </header>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="blog.html">Study In Pink</a></li>
+      <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <aside class="sidebar">
+      <img src="{{ url_for('static', filename='images/kunal.jpg') }}" class="profile-img" alt="Dr. Watson">
+      <h2> Mr. Kunal V. Dharme</h2>
+      <p>Doctor. Soldier. Blogger. Flatmate to a genius.</p>
+    </aside>
+
+    <main class="blog-posts">
+      <h2>Ask me anything</h2>
+      <p>If you have questions about the blog or wish to report a sighting of Sherlock Holmes, fill out the form below:</p>
+
+      <!-- ✅ Flash message block -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form class="contact-form" action="{{ url_for('contact') }}" method="post">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
+  </footer>
+</body>
+</html>

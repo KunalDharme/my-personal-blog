@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>A Study in Pink - Dr. John H. Watson's Blog</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+</head>
+<body>
+  <header class="site-header">
+    <img src="{{ url_for('static', filename='images/blog-header.jpg') }}" alt="Blog Header">
+    <img src="{{ url_for('static', filename='images/watson-profile.jpg') }}" alt="Watson Profile">
+    <h1>The Blog of Dr. John H. Watson</h1>
+    <p>Documenting the cases of Sherlock Holmes</p>
+  </header>
+  <nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="blog.html">Study In Pink</a></li>
+    <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  </nav>
+
+  <div class="container">
+    <aside class="sidebar">
+      <img src="images/watson-profile.jpg" class="profile-img" alt="Dr. Watson">
+      <h2>Dr. John H. Watson</h2>
+      <p>Doctor. Soldier. Blogger. Flatmate to a genius.</p>
+    </aside>
+
+    <main class="blog-posts">
+      <article>
+        <h2>A Study in Pink</h2>
+        <p class="date">January 14, 2010</p>
+        <p>
+          This was my first real case with Sherlock Holmes. The police were baffled by a series of suicides, all committed in similar fashion. But Sherlock instantly suspected something more sinister.
+        </p>
+        <p>
+          We visited the latest scene – a woman's body in a derelict house, dressed immaculately. Sherlock deduced that she had scratched a name onto the floor before she died. "Rache" — a clue or a message?
+        </p>
+        <p>
+          The case twisted and turned rapidly, with Sherlock always two steps ahead. He eventually faced the killer – a cabbie who played a deadly game, forcing victims to choose between two pills, one harmless, one fatal.
+        </p>
+        <p>
+          He offered Sherlock the same choice. I stepped in at the last moment... with a gun I hadn’t used since Afghanistan.
+        </p>
+        <p>
+          That day, I became more than a flatmate. I became a part of something incredible.
+        </p>
+      </article>
+      <section class="comments">
+  <h3>Comments</h3>
+
+  <div class="comment">
+    <p><strong>Sherlock Holmes:</strong> “Rache” is German for revenge. Of course it’s not important. Try to keep up, John.</p>
+    <p class="comment-date">January 14, 2010 - 10:43 PM</p>
+  </div>
+
+  <div class="comment">
+    <p><strong>Mrs. Hudson:</strong> Oh my, I remember that day! You both ran in looking like you’d seen a ghost!</p>
+    <p class="comment-date">January 14, 2010 - 11:10 PM</p>
+  </div>
+
+  <div class="comment">
+    <p><strong>DI Lestrade:</strong> Next time maybe don’t shoot people, Watson. Paperwork’s a nightmare.</p>
+    <p class="comment-date">January 15, 2010 - 12:05 AM</p>
+  </div>
+</section>
+
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
+  </footer>
+</body>
+</html>
