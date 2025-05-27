@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Admin Dashboard</title>
   <style>
     body {
@@ -10,56 +11,121 @@
       margin: 0;
       padding: 0;
     }
-
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 50px auto;
       padding: 30px;
       background-color: #1e1e1e;
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(0,0,0,0.7);
-      text-align: center;
     }
-
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
       color: #00ff99;
+      text-align: center;
+      margin-bottom: 30px;
       text-shadow: 0 0 10px #00ff99;
     }
-
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 40px;
+    }
+    .stat-box {
+      background-color: #292929;
+      padding: 20px;
+      border-radius: 10px;
+      width: 150px;
+      text-align: center;
+      box-shadow: 0 0 10px #00ff99;
+    }
+    .stat-box h2 {
+      font-size: 3rem;
+      margin: 0;
+      color: #00ff99;
+    }
+    .stat-box p {
+      margin: 5px 0 0 0;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .recent-posts {
+      background-color: #292929;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px #00ff99;
+    }
+    .recent-posts h3 {
+      margin-top: 0;
+      color: #00ff99;
+      text-shadow: 0 0 5px #00ff99;
+    }
     ul {
-      list-style-type: none;
+      list-style: none;
       padding: 0;
     }
-
     ul li {
-      margin: 15px 0;
+      padding: 10px 0;
+      border-bottom: 1px solid #00ff99;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #eee;
     }
-
-    ul li a {
+    ul li:last-child {
+      border-bottom: none;
+    }
+    a {
       color: #00ff99;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.2rem;
       transition: color 0.3s ease;
     }
-
-    ul li a:hover {
+    a:hover {
       color: #00cc77;
       text-shadow: 0 0 5px #00cc77;
+    }
+    .nav-links {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .nav-links a {
+      margin: 0 15px;
+      font-size: 1.1rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Welcome, Admin</h1>
-    <ul>
-      <li><a href="{{ url_for('admin.posts') }}">Manage Posts</a></li>
-      <li><a href="{{ url_for('admin.logout') }}">Logout</a></li>
-      <li><a href="{{ url_for('admin.change_password') }}">Change Password</a></li>
+    <h1>Admin Dashboard</h1>
 
-    </ul>
+    <div class="stats">
+      <div class="stat-box">
+        <h2>{{ total_posts }}</h2>
+        <p>Total Posts</p>
+      </div>
+      <!-- Add other stats if needed -->
+    </div>
+
+    <div class="recent-posts">
+      <h3>Recent Posts</h3>
+      <ul>
+        {% for post in recent_posts %}
+          <li>
+            <span>{{ post.title }}</span>
+            <a href="{{ url_for('admin.edit_post', post_id=post.id) }}">Edit</a>
+          </li>
+        {% else %}
+          <li>No posts yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="nav-links">
+      <a href="{{ url_for('admin.posts') }}">Manage Posts</a>
+      <a href="{{ url_for('admin.new_post') }}">Add New Post</a>
+      <a href="{{ url_for('admin.change_password') }}">Change Password</a>
+      <a href="{{ url_for('admin.logout') }}">Logout</a>
+    </div>
   </div>
 </body>
 </html>

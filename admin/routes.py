@@ -31,7 +31,10 @@ def login():
 def dashboard():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin.login'))
-    return render_template('admin/admin_dashboard.html')  # ✅ Move the file
+
+    total_posts = BlogPost.query.count()
+    recent_posts = BlogPost.query.order_by(BlogPost.created_at.desc()).limit(5).all()
+    return render_template('admin/admin_dashboard.html', total_posts=total_posts, recent_posts=recent_posts)
 
 @admin_routes.route('/logout')
 def logout():
@@ -62,6 +65,39 @@ def new_post():
         return redirect(url_for('admin.posts'))
 
     return render_template('admin/new_post.html')  # ✅ Correct path
+
+@admin_routes.route('/post/edit/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    post = BlogPost.query.get_or_404(post_id)
+
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.slug = request.form['slug']
+        post.content = request.form['content']
+
+        db.session.commit()
+        flash('Post updated successfully!', 'success')
+        return redirect(url_for('admin.posts'))
+
+    return render_template('admin/edit_post.html', post=post)
+
+
+
+@admin_routes.route('/post/delete/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    post = BlogPost.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post deleted successfully!', 'success')
+    return redirect(url_for('admin.posts'))
+
+
 
 @admin_routes.route('/change-password', methods=['GET', 'POST'])
 def change_password():
