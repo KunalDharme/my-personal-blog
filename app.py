@@ -31,6 +31,20 @@ def blog():
 def blog_baskerville():
     return render_template('blog-baskerville.html')
 
+@app.route('/blogs.html')
+def blog_list():
+    # Later, return list of all blog posts
+    return render_template('blog.html')
+
+@app.route('/photos.html')
+def photos():
+    photo_list = [
+        'kunal.jpg',
+        'watson-profile.jpg',
+        'blog-header.jpg'
+    ]
+    return render_template('photos.html', photo_list=photo_list)
+
 @app.route('/contact.html', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':

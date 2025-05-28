@@ -122,3 +122,51 @@ def change_password():
             return redirect(url_for('admin.dashboard'))
 
     return render_template('admin/change_password.html')
+
+import os
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@admin_routes.route('/photos', methods=['GET', 'POST'])
+def upload_photos():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    if request.method == 'POST':
+        if 'photo' not in request.files:
+            flash('No file part', 'danger')
+            return redirect(request.url)
+        file = request.files['photo']
+        if file.filename == '':
+            flash('No selected file', 'danger')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            flash('Photo uploaded successfully!', 'success')
+            return redirect(url_for('admin.upload_photos'))
+
+    uploaded_images = os.listdir(UPLOAD_FOLDER)
+    return render_template('admin/photos.html', images=uploaded_images)
+
+@admin_routes.route('/photo/delete/<int:photo_id>', methods=['POST'])
+def delete_photo(photo_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    photo = Photo.query.get_or_404(photo_id)
+    
+    # Delete file from static/uploads folder
+    file_path = os.path.join(current_app.root_path, 'static/uploads', photo.filename)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    db.session.delete(photo)
+    db.session.commit()
+    flash('Photo deleted successfully!', 'success')
+    return redirect(url_for('admin.dashboard'))

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <style>
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+      color: #ff9113;
+      text-shadow: 0 0 10px #fbff2d;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,255,153,0.3);
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
+    <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
+    <p>The Science of Digital Deduction</p>
+  </header>
+
+  <nav class="main-nav">
+    <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="blog.html">Study In Pink</a></li>
+    <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
+    <li><a href="blog_list.html">Blogs</a></li>
+    <li><a href="photos.html">Photos</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="help">Help?</a></li>
+    </ul>
+  </nav>
+
+  <h2>Photo Gallery</h2>
+
+  <div class="gallery">
+    {% for image in photo_list %}
+      <img src="{{ url_for('static', filename='images/' + image) }}" alt="Photo">
+    {% endfor %}
+  </div>
+
+  <footer>
+    <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
+  </footer>
+</body>
+</html>
