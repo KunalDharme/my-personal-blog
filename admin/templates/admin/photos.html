@@ -20,51 +20,46 @@
       margin: 10px 0;
       font-size: 1rem;
     }
-    img {
-      width: 150px;
-      height: auto;
-      margin: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ff99;
-    }
     .photo-card {
-  position: relative;
-  display: inline-block;
-  margin: 10px;
-}
-
-.photo-card img {
-  width: 200px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-}
-
-.photo-card form {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-}
-
-.photo-card button {
-  background-color: #ff4444;
-  border: none;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  box-shadow: 0 0 5px rgba(255, 0, 0, 0.4);
-  transition: background-color 0.3s;
-}
-
-.photo-card button:hover {
-  background-color: #cc0000;
-}
-
+      position: relative;
+      display: inline-block;
+      margin: 10px;
+    }
+    .photo-card img {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+    }
+    .photo-card form {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
+    .photo-card button {
+      background-color: #ff4444;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 5px rgba(255, 0, 0, 0.4);
+      transition: background-color 0.3s;
+    }
+    .photo-card button:hover {
+      background-color: #cc0000;
+    }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Upload Photos</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="photo" accept="image/*" required />
+      <button type="submit">Upload</button>
+    </form>
+
     <div class="gallery">
       {% for photo in photos %}
         <div class="photo-card">
@@ -73,9 +68,10 @@
             <button type="submit">Delete</button>
           </form>
         </div>
+      {% else %}
+        <p>No photos uploaded yet.</p>
       {% endfor %}
     </div>
-
-
+  </div>
 </body>
 </html>

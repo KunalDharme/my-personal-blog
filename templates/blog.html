@@ -1,78 +1,139 @@
+<!-- templates/blog.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>A Study in Pink - Dr. John H. Watson's Blog</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  
+    <meta charset="UTF-8">
+    <title>Read My Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #00ff99;
+        }
+
+        header, footer {
+            background-color: #111;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px #00ff99;
+        }
+
+        header h1, footer p {
+            margin: 0;
+            color: #00ff99;
+            text-shadow: 0 0 5px #00ff99;
+        }
+
+        .blog-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .blog-post {
+            background: #111;
+            border: 2px solid #00ff99;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px #00ff99aa;
+            transition: 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px #00ff99;
+        }
+
+        .blog-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #00ff99;
+            text-shadow: 0 0 3px #00ff99;
+        }
+
+        .blog-date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #ccc;
+        }
+
+        .toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #00ff99;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px 0;
+            font-size: 1rem;
+            text-shadow: 0 0 5px #00ff99;
+        }
+
+        .toggle-btn:hover {
+            color: #00cc77;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-  <header class="site-header">
-    <img src="{{ url_for('static', filename='images/blog-header.jpg') }}" alt="Blog Header">
-    <img src="{{ url_for('static', filename='images/watson-profile.jpg') }}" alt="Watson Profile">
-    <h1>The Blog of Dr. John H. Watson</h1>
-    <p>Documenting the cases of Sherlock Holmes</p>
-  </header>
-  <nav class="main-nav">
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="blog.html">Study In Pink</a></li>
-    <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  </nav>
+<header class="site-header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
+    <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
+    <p>The Science of Digital Deduction</p>
+</header>
 
-  <div class="container">
-    <aside class="sidebar">
-      <img src="images/watson-profile.jpg" class="profile-img" alt="Dr. Watson">
-      <h2>Dr. John H. Watson</h2>
-      <p>Doctor. Soldier. Blogger. Flatmate to a genius.</p>
-    </aside>
-
-    <main class="blog-posts">
-      <article>
-        <h2>A Study in Pink</h2>
-        <p class="date">January 14, 2010</p>
-        <p>
-          This was my first real case with Sherlock Holmes. The police were baffled by a series of suicides, all committed in similar fashion. But Sherlock instantly suspected something more sinister.
-        </p>
-        <p>
-          We visited the latest scene – a woman's body in a derelict house, dressed immaculately. Sherlock deduced that she had scratched a name onto the floor before she died. "Rache" — a clue or a message?
-        </p>
-        <p>
-          The case twisted and turned rapidly, with Sherlock always two steps ahead. He eventually faced the killer – a cabbie who played a deadly game, forcing victims to choose between two pills, one harmless, one fatal.
-        </p>
-        <p>
-          He offered Sherlock the same choice. I stepped in at the last moment... with a gun I hadn’t used since Afghanistan.
-        </p>
-        <p>
-          That day, I became more than a flatmate. I became a part of something incredible.
-        </p>
-      </article>
-      <section class="comments">
-  <h3>Comments</h3>
-
-  <div class="comment">
-    <p><strong>Sherlock Holmes:</strong> “Rache” is German for revenge. Of course it’s not important. Try to keep up, John.</p>
-    <p class="comment-date">January 14, 2010 - 10:43 PM</p>
-  </div>
-
-  <div class="comment">
-    <p><strong>Mrs. Hudson:</strong> Oh my, I remember that day! You both ran in looking like you’d seen a ghost!</p>
-    <p class="comment-date">January 14, 2010 - 11:10 PM</p>
-  </div>
-
-  <div class="comment">
-    <p><strong>DI Lestrade:</strong> Next time maybe don’t shoot people, Watson. Paperwork’s a nightmare.</p>
-    <p class="comment-date">January 15, 2010 - 12:05 AM</p>
-  </div>
-</section>
-
-    </main>
-  </div>
+<div class="blog-container">
+    {% for blog in blogs %}
+    <div class="blog-post">
+        <div class="blog-title">{{ blog.title }}</div>
+        <div class="blog-date">{{ blog.created_at.strftime('%B %d, %Y') }}</div>
+        <div class="blog-content">
+            <div class="preview-content">
+                {{ blog.content[:300] }}{% if blog.content|length > 300 %}...{% endif %}
+            </div>
+            {% if blog.content|length > 300 %}
+            <div class="full-content" style="display: none;">
+                {{ blog.content }}
+            </div>
+            <button class="toggle-btn">Read More</button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
   <footer>
     <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
   </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.toggle-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const fullContent = this.previousElementSibling;
+                const preview = fullContent.previousElementSibling;
+                if (fullContent.style.display === "none") {
+                    fullContent.style.display = "block";
+                    preview.style.display = "none";
+                    this.innerText = "Show Less";
+                } else {
+                    fullContent.style.display = "none";
+                    preview.style.display = "block";
+                    this.innerText = "Read More";
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

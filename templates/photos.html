@@ -52,14 +52,18 @@
     </ul>
   </nav>
 
-  <h2>Photo Gallery</h2>
+  <h1>Photo Gallery</h1>
 
   <div class="gallery">
-    {% for image in photo_list %}
-      <img src="{{ url_for('static', filename='images/' + image) }}" alt="Photo">
+    {% for photo in photo_list %}
+      <div class="photo-card">
+        <img src="{{ url_for('static', filename='uploads/' ~ photo) }}" alt="Photo">
+      </div>
+    {% else %}
+      <p>No photos uploaded yet.</p>
     {% endfor %}
   </div>
-
+  
   <footer>
     <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
   </footer>

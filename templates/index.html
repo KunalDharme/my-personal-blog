@@ -29,9 +29,7 @@
   <nav class="main-nav">
   <ul>
     <li><a href="index.html">Home</a></li>
-    <li><a href="blog.html">Study In Pink</a></li>
-    <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
-    <li><a href="blog_list.html">Blogs</a></li>
+    <li><a href="blog.html">Blogs</a></li>
     <li><a href="photos.html">Photos</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="help">Help?</a></li>
@@ -44,18 +42,16 @@
       <h2>I'am Kunal V. Dharme,</h2>
       <p>the world's only consulting investigator.Send me intresting cases only via: kunaldharme13@gmail.com</p>
     </aside>
-
     <main class="blog-posts">
+      {% for blog in blogs[:3] %}  {# Show latest 3 blogs only #}
       <article>
-        <h2><a href="blog.html">A Study in Pink</a></h2>
-        <p class="date">January 14, 2010</p>
-        <p>First case with Sherlock Holmes. Four suicides, all linked. A serial killer who forces victims to choose...</p>
+        <h2><a href="{{ url_for('post', slug=blog.slug) }}">{{ blog.title }}</a></h2>
+        <p class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</p>
+        <p>{{ blog.content[:150] }}{% if blog.content|length > 150 %}...{% endif %}</p>
       </article>
-      <article>
-        <h2><a href="blog.html">The Blind Banker</a></h2>
-        <p class="date">January 21, 2010</p>
-        <p>Sherlock's contacted by an old friend from uni. Weird symbols appear on a flat wall. Murder, smuggling, and...</p>
-      </article>
+      {% else %}
+      <p>No blog posts yet.</p>
+      {% endfor %}
     </main>
   </div>
 
