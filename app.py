@@ -1,22 +1,30 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename  # Added import
+from werkzeug.utils import secure_filename
+from admin.models import ContactMessage, BlogPost, Comment  # Ensure all models are imported
 from config import Config
 from datetime import datetime
-import os  # Added import
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
 
+# Register admin blueprint
 from admin.routes import admin_routes
-from admin.models import BlogPost, Comment
-
 app.register_blueprint(admin_routes, url_prefix='/admin')
 
-# Dummy blog list for demo — replace with DB queries
+# Upload folder config
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Create tables manually (Option A fix)
+with app.app_context():
+    db.create_all()
+
+# Dummy blog list for demo — replace with DB queries if needed
 blogs = [
     {
         'id': 1,
@@ -34,10 +42,6 @@ blogs = [
 
 # Public pages
 @app.route('/')
-def index():
-    recent_blogs = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
-    return render_template('index.html', blogs=recent_blogs)
-
 @app.route("/index.html")
 def home():
     recent_blogs = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
@@ -56,10 +60,6 @@ def blog_detail(blog_id):
 @app.route('/blog-baskerville.html')
 def blog_baskerville():
     return render_template('blog-baskerville.html')
-
-# Upload folder config
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/photos.html', methods=['GET', 'POST'])
 def photos():
@@ -84,6 +84,11 @@ def contact():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
+
+        contact_message = ContactMessage(name=name, email=email, message=message)
+        db.session.add(contact_message)
+        db.session.commit()
+
         flash('Your message has been sent successfully!', 'success')
         return redirect(url_for('contact'))
     return render_template('contact.html')

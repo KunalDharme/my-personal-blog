@@ -2,8 +2,8 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from .models import AdminUser, BlogPost, Photo
-from extensions import db
+from .models import AdminUser, BlogPost, Photo, ContactMessage
+from extensions import db 
 
 admin_routes = Blueprint('admin', __name__, template_folder='templates')
 
@@ -190,3 +190,21 @@ def delete_photo(photo_id):
     db.session.commit()
     flash('Photo deleted successfully!', 'success')
     return redirect(url_for('admin.upload_photos'))
+
+@admin_routes.route('/messages')
+def view_messages():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
+    return render_template('admin/messages.html', messages=messages)
+
+@admin_routes.route('/message/read/<int:message_id>')
+def mark_as_read(message_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    msg = ContactMessage.query.get_or_404(message_id)
+    msg.read = not msg.read  # Toggle read status
+    db.session.commit()
+    return redirect(url_for('admin.view_messages'))
