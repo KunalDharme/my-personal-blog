@@ -107,9 +107,11 @@ def post(slug):
         comment = Comment(blog=post, name=name, text=text)
         db.session.add(comment)
         db.session.commit()
+        return redirect(url_for('post', slug=slug))  # Redirect after POST to show new comment
 
-    comments = Comment.query.filter_by(blog=post, approved=True).order_by(Comment.created_at.desc()).all()
+    comments = Comment.query.filter_by(blog=post).order_by(Comment.created_at.desc()).all()
     return render_template('post.html', post=post, comments=comments)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

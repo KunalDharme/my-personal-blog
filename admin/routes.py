@@ -2,8 +2,9 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from .models import AdminUser, BlogPost, Photo, ContactMessage
 from extensions import db 
+from .models import AdminUser, BlogPost, Photo, ContactMessage, Comment
+
 
 admin_routes = Blueprint('admin', __name__, template_folder='templates')
 
@@ -208,3 +209,25 @@ def mark_as_read(message_id):
     msg.read = not msg.read  # Toggle read status
     db.session.commit()
     return redirect(url_for('admin.view_messages'))
+
+# View all comments (with blog post info)
+@admin_routes.route('/comments')
+def view_comments():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    # Get all comments ordered by newest first
+    comments = Comment.query.order_by(Comment.created_at.desc()).all()
+    return render_template('admin/comments.html', comments=comments)
+
+# Delete comment by ID
+@admin_routes.route('/comment/delete/<int:comment_id>', methods=['POST'])
+def delete_comment(comment_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    comment = Comment.query.get_or_404(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Comment deleted successfully!', 'success')
+    return redirect(url_for('admin.view_comments'))

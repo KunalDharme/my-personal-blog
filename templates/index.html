@@ -5,6 +5,7 @@
     <title>Watson's Blog</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
   <header class="site-header">
@@ -49,21 +50,99 @@
       <h2>I'am Kunal V. Dharme,</h2>
       <p>the world's only consulting investigator.Send me intresting cases only via: kunaldharme13@gmail.com</p>
     </aside>
-    <main class="blog-posts">
-      {% for blog in blogs[:3] %}  {# Show latest 3 blogs only #}
-      <article>
-        <h2><a href="{{ url_for('post', slug=blog.slug) }}">{{ blog.title }}</a></h2>
-        <p class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</p>
-        <p>{{ blog.content[:150] }}{% if blog.content|length > 150 %}...{% endif %}</p>
-      </article>
+<main class="blog-posts">
+  {% for blog in blogs[:3] %}
+  <article>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin: 0;">
+        <a href="{{ url_for('post', slug=blog.slug) }}">{{ blog.title }}</a>
+      </h2>
+      <div style="display: flex; align-items: center;">
+        <button class="like-btn" onclick="toggleLike(this)" data-slug="{{ blog.slug }}" style="background: none; border: none; cursor: pointer; font-size: 18px;">❤️</button>
+        <span class="like-count" id="like-count-{{ blog.slug }}" style="margin-left: 5px;">0</span>
+      </div>
+    </div>
+    <p class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</p>
+    <p>{{ blog.content[:150] }}{% if blog.content|length > 150 %}...{% endif %}</p>
+
+    <!-- Existing Comments -->
+    <div class="comments-section">
+      <h4>Comments:</h4>
+      {% for comment in blog.comments if comment.approved %}
+        <p><strong>{{ comment.name }}</strong>: {{ comment.text }}</p>
       {% else %}
-      <p>No blog posts yet.</p>
+        <p>No comments yet.</p>
       {% endfor %}
-    </main>
+    </div>
+
+    <!-- Toggle Comment Form Button -->
+    <button onclick="toggleCommentForm('comment-form-{{ blog.id }}')" class="toggle-comment-btn">💬 Add Comment</button>
+
+    <!-- Hidden Comment Form -->
+    <form id="comment-form-{{ blog.id }}" action="{{ url_for('post', slug=blog.slug) }}" method="post" class="comment-form" style="display: none; margin-top: 10px;">
+      <input type="text" name="name" placeholder="Your name" required>
+      <textarea name="text" placeholder="Write your comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+  </article>
+  {% else %}
+  <p>No blog posts yet.</p>
+  {% endfor %}
+</main>
+
+
   </div>
 
   <footer>
     <p>&copy; 2025 Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
   </footer>
+  <script>
+  function toggleCommentForm(formId) {
+    const form = document.getElementById(formId);
+    form.style.display = form.style.display === "none" ? "block" : "none";
+  }
+
+  function toggleLike(button) {
+    const slug = button.getAttribute('data-slug');
+    const countSpan = document.getElementById('like-count-' + slug);
+    const storageKey = 'likes-' + slug;
+    let liked = localStorage.getItem(storageKey) === 'true';
+    liked = !liked;
+    localStorage.setItem(storageKey, liked);
+
+    let currentCount = parseInt(localStorage.getItem(storageKey + '-count')) || 0;
+    if (liked) {
+      button.classList.add('liked');
+      button.textContent = '❤️';
+      currentCount += 1;
+    } else {
+      button.classList.remove('liked');
+      button.textContent = '🤍';
+      currentCount = Math.max(currentCount - 1, 0);
+    }
+    localStorage.setItem(storageKey + '-count', currentCount);
+    countSpan.textContent = currentCount;
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.like-btn').forEach(button => {
+      const slug = button.getAttribute('data-slug');
+      const storageKey = 'likes-' + slug;
+      const liked = localStorage.getItem(storageKey) === 'true';
+      const count = parseInt(localStorage.getItem(storageKey + '-count')) || 0;
+
+      if (liked) {
+        button.classList.add('liked');
+        button.textContent = '❤️';
+      }
+
+      const countSpan = document.getElementById('like-count-' + slug);
+      if (countSpan) {
+        countSpan.textContent = count;
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

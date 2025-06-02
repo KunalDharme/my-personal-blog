@@ -1,0 +1,49 @@
+{% extends 'admin/admin.html' %}
+
+{% block title %}Manage Comments{% endblock %}
+
+{% block content %}
+<h2>Comment Moderation</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Blog Post</th>
+      <th>Name</th>
+      <th>Comment</th>
+      <th>Approved</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for comment in comments %}
+      <tr>
+        <td>{{ comment.id }}</td>
+        <td>{{ comment.blog.title }}</td>
+        <td>{{ comment.name }}</td>
+        <td>{{ comment.text }}</td>
+        <td>{{ 'Yes' if comment.approved else 'No' }}</td>
+        <td>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>
+          <form action="{{ url_for('admin.delete_comment', comment_id=comment.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this comment?');">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7">No comments found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

@@ -8,14 +8,27 @@
     <style>
         body {
             margin: 0;
-
             background-color: #000;
             color: #000000;
         }
+
         .blog-container {
             max-width: 1300px;
             margin: 40px auto;
             padding: 0 30px;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .search-box input {
+            width: 50%;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: 1px solid #aaa;
+            border-radius: 50px;
         }
 
         .blog-post {
@@ -36,6 +49,7 @@
             margin-bottom: 10px;
             color: #000000;
         }
+
         .blog-content {
             font-size: 1.1rem;
             line-height: 1.7;
@@ -60,28 +74,33 @@
 <body>
   <header class="site-header">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
-    <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
+    <h1>The Blog of  Mr. Kunal V. Dharme</h1>
     <p>The Science of Digital Deduction</p>
   </header>
 
   <nav class="main-nav">
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="blog.html">Blogs</a></li>
-    <li><a href="photos.html">Photos</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li id="help-link-wrapper">
-      <a href="#" id="help-link">Help?</a>
-      <div id="help-hover-modal">
-        <h3>Help?</h3>
-        <p>This website is a digital journal dedicated to cybersecurity, ethical hacking, and cyber forensic investigation. It documents real-world problems, cyber incidents, and suspicious digital activity that I personally investigate or analyze. Here, you’ll find detailed blog posts where I break down how I identify, trace, and understand the methods used by cyber attackers — including how I uncover hidden patterns, analyze digital evidence, and trace the origin of attacks using forensic tools and ethical hacking techniques.</p>
-        <p> The content is crafted to raise awareness, educate readers, and demonstrate practical approaches to solving cyber threats — whether it's a phishing attempt, unauthorized access, social engineering, or data leaks. If you’ve been affected by a suspicious activity, you can reach out through the contact page to share your case. This platform is not just a showcase of findings, but a growing resource for anyone interested in understanding how cyber incidents are investigated and resolved responsibly, legally, and ethically.</p>
-      </div>
-    </li>
-  </ul>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="blog.html">Blogs</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li id="help-link-wrapper">
+        <a href="#" id="help-link">Help?</a>
+        <div id="help-hover-modal">
+          <h3>Help?</h3>
+          <p>This website is a digital journal dedicated to cybersecurity, ethical hacking, and cyber forensic investigation. It documents real-world problems, cyber incidents, and suspicious digital activity that I personally investigate or analyze...</p>
+        </div>
+      </li>
+    </ul>
   </nav>
 
-<div class="blog-container">
+  <div class="blog-container">
+
+    <!-- 🔍 Search Box -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Search blogs by title or content...">
+    </div>
+
     {% for blog in blogs %}
     <div class="blog-post">
         <div class="blog-title">{{ blog.title }}</div>
@@ -99,16 +118,16 @@
         </div>
     </div>
     {% endfor %}
-</div>
+  </div>
 
   <footer>
     <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
   </footer>
 
-<script>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const buttons = document.querySelectorAll('.toggle-btn');
-        buttons.forEach(btn => {
+        // Read More toggle
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 const fullContent = this.previousElementSibling;
                 const preview = fullContent.previousElementSibling;
@@ -123,8 +142,23 @@
                 }
             });
         });
-    });
-</script>
 
+        // Search filtering
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const keyword = this.value.toLowerCase();
+            const posts = document.querySelectorAll('.blog-post');
+            posts.forEach(post => {
+                const title = post.querySelector('.blog-title').innerText.toLowerCase();
+                const content = post.querySelector('.blog-content').innerText.toLowerCase();
+                if (title.includes(keyword) || content.includes(keyword)) {
+                    post.style.display = 'block';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+        });
+    });
+  </script>
 </body>
 </html>
