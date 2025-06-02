@@ -13,8 +13,8 @@
           line-height: 1.6;
         }
         .post-container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 30px auto 0 auto;
             background: #ffffff;
             padding: 30px;
             border-left: 5px solid #000c08;
@@ -62,17 +62,11 @@
     <p>The Science of Digital Deduction</p>
   </header>
 
-  <nav class="main-nav">
-    <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="blog.html">Study In Pink</a></li>
-    <li><a href="blog_list.html">Blogs</a></li>
-    <li><a href="photos.html">Photos</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="help">Help?</a></li>
-    </ul>
-  </nav>
-
+    <div style="padding: 20px;">
+      <a href="{{ url_for('home') }}" style="text-decoration: none; color: #000;">
+        ← <strong>Back to Home</strong>
+        </a>
+    </div>
 
     <div class="post-container">
         <div class="post-title">{{ post.title }}</div>

@@ -8,93 +8,84 @@
     <style>
         body {
             margin: 0;
-            font-family: 'Courier New', monospace;
+
             background-color: #000;
-            color: #00ff99;
+            color: #000000;
         }
-
-        header, footer {
-            background-color: #111;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 0 20px #00ff99;
-        }
-
-        header h1, footer p {
-            margin: 0;
-            color: #00ff99;
-            text-shadow: 0 0 5px #00ff99;
-        }
-
         .blog-container {
-            max-width: 900px;
+            max-width: 1300px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 30px;
         }
 
         .blog-post {
-            background: #111;
-            border: 2px solid #00ff99;
-            border-radius: 10px;
+            background: #ffffff;
+            border-left: 4px solid #2d2d2d;
             padding: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 0 15px #00ff99aa;
-            transition: 0.3s ease;
+            box-shadow: 0 0 5px #000000aa;
+            transition: 0.2s ease;
         }
 
         .blog-post:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px #00ff99;
+            transform: scale(1.008);
         }
 
         .blog-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 10px;
-            color: #00ff99;
-            text-shadow: 0 0 3px #00ff99;
+            color: #000000;
         }
-
-        .blog-date {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 15px;
-        }
-
         .blog-content {
             font-size: 1.1rem;
             line-height: 1.7;
-            color: #ccc;
+            color: #000000;
         }
 
         .toggle-btn {
             background-color: transparent;
             border: none;
-            color: #00ff99;
+            color: #00cc77;
             font-weight: bold;
             cursor: pointer;
             padding: 10px 0;
             font-size: 1rem;
-            text-shadow: 0 0 5px #00ff99;
         }
 
         .toggle-btn:hover {
-            color: #00cc77;
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-<header class="site-header">
+  <header class="site-header">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
     <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
     <p>The Science of Digital Deduction</p>
-</header>
+  </header>
+
+  <nav class="main-nav">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="blog.html">Blogs</a></li>
+    <li><a href="photos.html">Photos</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li id="help-link-wrapper">
+      <a href="#" id="help-link">Help?</a>
+      <div id="help-hover-modal">
+        <h3>Help?</h3>
+        <p>This website is a digital journal dedicated to cybersecurity, ethical hacking, and cyber forensic investigation. It documents real-world problems, cyber incidents, and suspicious digital activity that I personally investigate or analyze. Here, you’ll find detailed blog posts where I break down how I identify, trace, and understand the methods used by cyber attackers — including how I uncover hidden patterns, analyze digital evidence, and trace the origin of attacks using forensic tools and ethical hacking techniques.</p>
+        <p> The content is crafted to raise awareness, educate readers, and demonstrate practical approaches to solving cyber threats — whether it's a phishing attempt, unauthorized access, social engineering, or data leaks. If you’ve been affected by a suspicious activity, you can reach out through the contact page to share your case. This platform is not just a showcase of findings, but a growing resource for anyone interested in understanding how cyber incidents are investigated and resolved responsibly, legally, and ethically.</p>
+      </div>
+    </li>
+  </ul>
+  </nav>
 
 <div class="blog-container">
     {% for blog in blogs %}
     <div class="blog-post">
         <div class="blog-title">{{ blog.title }}</div>
-        <div class="blog-date">{{ blog.created_at.strftime('%B %d, %Y') }}</div>
+        <div class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</div>
         <div class="blog-content">
             <div class="preview-content">
                 {{ blog.content[:300] }}{% if blog.content|length > 300 %}...{% endif %}

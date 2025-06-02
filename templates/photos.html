@@ -3,69 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <title>Photos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <style>
     h2 {
       text-align: center;
       margin-top: 20px;
-      color: #ff9113;
-      text-shadow: 0 0 10px #fbff2d;
+      color: #000000;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr); /* 4 per row */
       gap: 20px;
       padding: 30px;
     }
 
     .gallery img {
       width: 100%;
-      height: auto;
+      height: 200px;
+      object-fit: cover;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,255,153,0.3);
       transition: transform 0.3s;
+      cursor: pointer;
     }
 
     .gallery img:hover {
       transform: scale(1.05);
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    .lightbox.show {
+      display: flex;
+    }
+
+    .lightbox:after {
+      content: "✕";
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      font-size: 40px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <header class="site-header">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
-    <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
+    <h1>The Blog of Mr. Kunal V. Dharme</h1>
     <p>The Science of Digital Deduction</p>
   </header>
 
   <nav class="main-nav">
     <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="blog.html">Study In Pink</a></li>
-    <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
-    <li><a href="blog_list.html">Blogs</a></li>
-    <li><a href="photos.html">Photos</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="help">Help?</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="blog.html">Blogs</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li id="help-link-wrapper">
+        <a href="#" id="help-link">Help?</a>
+        <div id="help-hover-modal">
+          <h3>Help?</h3>
+          <p>This website is a digital journal dedicated to cybersecurity, ethical hacking, and cyber forensic investigation. It documents real-world problems, cyber incidents, and suspicious digital activity that I personally investigate or analyze. Here, you’ll find detailed blog posts where I break down how I identify, trace, and understand the methods used by cyber attackers — including how I uncover hidden patterns, analyze digital evidence, and trace the origin of attacks using forensic tools and ethical hacking techniques.</p>
+          <p> The content is crafted to raise awareness, educate readers, and demonstrate practical approaches to solving cyber threats — whether it's a phishing attempt, unauthorized access, social engineering, or data leaks. If you’ve been affected by a suspicious activity, you can reach out through the contact page to share your case. This platform is not just a showcase of findings, but a growing resource for anyone interested in understanding how cyber incidents are investigated and resolved responsibly, legally, and ethically.</p>
+        </div>
+      </li>
     </ul>
   </nav>
 
-  <h1>Photo Gallery</h1>
+  <h2>Photo Gallery</h2>
 
   <div class="gallery">
     {% for photo in photo_list %}
       <div class="photo-card">
-        <img src="{{ url_for('static', filename='uploads/' ~ photo) }}" alt="Photo">
+        <img src="{{ url_for('static', filename='uploads/' ~ photo) }}" alt="Photo" onclick="openLightbox(this.src)">
       </div>
     {% else %}
       <p>No photos uploaded yet.</p>
     {% endfor %}
   </div>
-  
+
+  <!-- Lightbox container -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Full Size">
+  </div>
+
   <footer>
-    <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
+    <p>&copy; 2025 Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
   </footer>
+
+  <script>
+    function openLightbox(src) {
+      const lightbox = document.getElementById("lightbox");
+      const img = document.getElementById("lightbox-img");
+      img.src = src;
+      lightbox.classList.add("show");
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").classList.remove("show");
+    }
+  </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
   <title>Contact - Mr. Kunal V. Dharme's Blog</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <style>
-    .alert-success {
+    .alert-contact {
       background-color: #d4edda;
       color: #155724;
       padding: 10px;
@@ -18,19 +18,24 @@
 <body>
   <header class="site-header">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
-    <h1 >The Blog of  Mr. Kunal V. Dharme</h1>
+    <h1>The Blog of Mr. Kunal V. Dharme</h1>
     <p>The Science of Digital Deduction</p>
   </header>
 
   <nav class="main-nav">
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="blog.html">Study In Pink</a></li>
-      <li><a href="blog-baskerville.html">Hounds of Baskerville</a></li>
-      <li><a href="blog_list.html">Blogs</a></li>
+      <li><a href="blog.html">Blogs</a></li>
       <li><a href="photos.html">Photos</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="help">Help?</a></li>
+      <li id="help-link-wrapper">
+        <a href="#" id="help-link">Help?</a>
+        <div id="help-hover-modal">
+          <h3>Help?</h3>
+          <p>This website is a digital journal dedicated to cybersecurity, ethical hacking, and cyber forensic investigation. It documents real-world problems, cyber incidents, and suspicious digital activity that I personally investigate or analyze. Here, you’ll find detailed blog posts where I break down how I identify, trace, and understand the methods used by cyber attackers — including how I uncover hidden patterns, analyze digital evidence, and trace the origin of attacks using forensic tools and ethical hacking techniques.</p>
+          <p>The content is crafted to raise awareness, educate readers, and demonstrate practical approaches to solving cyber threats — whether it's a phishing attempt, unauthorized access, social engineering, or data leaks. If you’ve been affected by a suspicious activity, you can reach out through the contact page to share your case. This platform is not just a showcase of findings, but a growing resource for anyone interested in understanding how cyber incidents are investigated and resolved responsibly, legally, and ethically.</p>
+        </div>
+      </li>
     </ul>
   </nav>
 
@@ -38,18 +43,20 @@
     <aside class="sidebar">
       <img src="{{ url_for('static', filename='images/kunal.jpg') }}" class="profile-img" alt="Dr. Watson">
       <h2>I'am Kunal V. Dharme,</h2>
-      <p>the world's only consulting investigator.Send me intresting cases only via: kunaldharme13@gmail.com</p>
+      <p>the world's only consulting investigator. Send me interesting cases only via: kunaldharme13@gmail.com</p>
     </aside>
 
     <main class="blog-posts">
       <h2>Ask me anything</h2>
-      <p>If you have questions about the blog or wish to report a sighting of Sherlock Holmes, fill out the form below:</p>
+      <p>If you have questions about the blog or "Got hacked? Suspicious emails? Strangers accessing your data?", fill out the form below:</p>
 
-      <!-- ✅ Flash message block -->
+      <!-- Flash messages filtered to category "contact" only -->
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
-            <div class="alert-{{ category }}">{{ message }}</div>
+            {% if category == 'contact' %}
+              <div class="alert-{{ category }}">{{ message }}</div>
+            {% endif %}
           {% endfor %}
         {% endif %}
       {% endwith %}
@@ -70,7 +77,7 @@
   </div>
 
   <footer>
-    <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
+    <p>&copy; 2025 Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
   </footer>
 </body>
 </html>
