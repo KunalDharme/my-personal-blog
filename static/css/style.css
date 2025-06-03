@@ -37,32 +37,67 @@ body {
 .main-nav {
   background-color: #fbf1f1;
   text-align: center;
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 3px solid #dccbcb;
+  box-shadow: 0 2px 8px rgba(220, 203, 203, 0.4);
+  user-select: none;
 }
 
 .main-nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  display: inline-flex;
+  gap: 25px;
 }
 
-.main-nav li {
-  display: inline-block;
-  margin: 0 15px;
-}
 
 .main-nav a {
   text-decoration: none;
-  color: #2b2b2b;
-  font-weight: bold;
-  font-size: 1.1em;
-  transition: color 0.3s;
+  color: #000844;
+  font-weight: 1150;
+  font-size: 1.18em;
+  padding: 10px 12px;
+  border-radius: 20px;
+  position: relative;
+  transition: 
+    color 0.3s ease, 
+    background-color 0.3s ease, 
+    box-shadow 0.3s ease, 
+    transform 0.2s ease;
 }
 
 .main-nav a:hover {
-  color: #bbb;
+  color: #fff;
+  background-color: rgba(192, 53, 53, 0.8);
+  transform: scale(0.8);
 }
+
+.main-nav a.active {
+  color: #fff;
+  background-color: #b00043;
+  box-shadow: 0 0 12px #b00043;
+  pointer-events: none; /* prevent clicking active link */
+  transform: scale(1.05);
+}
+
+/* Optional subtle underline on hover */
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 15%;
+  width: 70%;
+  height: 3px;
+  background-color: transparent;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.main-nav a:hover::after {
+  background-color: #fff;
+}
+
 /* Container layout */
 .container {
   display: flex;
@@ -292,7 +327,7 @@ footer {
   border-radius: 4px;
   border: 1px solid #666;
   background-color: #ffffff;
-  color: #fff;
+  color: #000000;
   font-family: monospace;
 }
 
