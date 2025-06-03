@@ -2,183 +2,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Read My Blog</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <style>
-h1 {
-    font-family: 'DejaVu Sans Mono', monospace;
-    font-size: 2.4rem;
-    color: #e1ecff;
-    text-shadow: 0 0 3px rgba(0, 255, 255, 0.3), 0 0 10px rgba(0, 255, 255, 0.2);
-    letter-spacing: 1.5px;
-    font-weight: bold;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    padding: 6px 20px;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
-    display: inline-block;
-    transition: transform 0.3s ease-in-out;
-}
+  <meta charset="UTF-8">
+  <title>Read My Blog</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #000000;
+    }
 
-h1:hover {
-    transform: scale(1.02);
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.6), 0 0 10px rgba(0, 255, 255, 0.4);
-}
+    h1 {
+      font-family: 'DejaVu Sans Mono', monospace;
+      font-size: 2.4rem;
+      color: #e1ecff;
+      text-shadow: 0 0 3px rgba(0, 255, 255, 0.3), 0 0 10px rgba(0, 255, 255, 0.2);
+      letter-spacing: 1.5px;
+      font-weight: bold;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      padding: 6px 20px;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+      display: inline-block;
+      transition: transform 0.3s ease-in-out;
+    }
 
-        body {
-            margin: 0;
-            background-color: #000;
-            color: #000000;
-        }
+    h1:hover {
+      transform: scale(1.02);
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.6), 0 0 10px rgba(0, 255, 255, 0.4);
+    }
 
-        .blog-container {
-            max-width: 1300px;
-            margin: 40px auto;
-            padding: 0 30px;
-        }
+    .blog-container {
+      max-width: 1300px;
+      margin: 40px auto;
+      padding: 0 30px;
+    }
 
-        .search-box {
-            text-align: center;
-            margin-bottom: 40px;
-        }
+    .search-box {
+      text-align: center;
+      margin-bottom: 40px;
+    }
 
-        .search-box input {
-            width: 50%;
-            padding: 10px 15px;
-            font-size: 1rem;
-            border: 1px solid #aaa;
-            border-radius: 50px;
-        }
+    .search-box input {
+      width: 50%;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border: 1px solid #aaa;
+      border-radius: 50px;
+    }
 
-        .blog-post {
-            background: #ffffff;
-            border-left: 4px solid #2d2d2d;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 0 5px #000000aa;
-            transition: 0.2s ease;
-        }
+    .blog-post {
+      background: #ffffff;
+      border-left: 4px solid #2d2d2d;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 5px #000000aa;
+      transition: 0.2s ease;
+    }
 
-        .blog-post:hover {
-            transform: scale(1.008);
-        }
+    .blog-post:hover {
+      transform: scale(1.008);
+    }
 
-        .blog-title {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #000000;
-        }
+    .blog-title {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #000000;
+    }
 
-        .blog-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: #000000;
-        }
+    .date {
+      font-size: 0.9rem;
+      color: #444;
+      margin-bottom: 10px;
+    }
 
-        .toggle-btn {
-            background-color: transparent;
-            border: none;
-            color: #00cc77;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px 0;
-            font-size: 1rem;
-        }
+    .blog-content {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #000000;
+    }
 
-        .toggle-btn:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .toggle-btn {
+      background-color: transparent;
+      border: none;
+      color: #00cc77;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 10px 0;
+      font-size: 1rem;
+    }
+
+    .toggle-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Header Section -->
   <header class="site-header">
     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Watson Profile" style="width: 100px; height: 100px;">
-    <h1>The Blog of  Mr. Kunal V. Dharme</h1>
+    <h1>The Blog of Mr. Kunal V. Dharme</h1>
     <p>The Science of Digital Deduction</p>
   </header>
 
+  <!-- Navigation Menu -->
   <nav class="main-nav">
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="blog.html">Blogs</a></li>
-      <li><a href="photos.html">Photos</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li id="help-link-wrapper">
-        <a href="#" id="help-link">Help?</a>
-        <div id="help-hover-modal">
-          <h3>Help?</h3>
-          <p>This website is a digital journal dedicated to cybersecurity, ethical hacking, and cyber forensic investigation. It documents real-world problems, cyber incidents, and suspicious digital activity that I personally investigate or analyze...</p>
-        </div>
-      </li>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('all_blogs') }}">Blogs</a></li>
+      <li><a href="{{ url_for('photos') }}">Photos</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+      <li><a href="help.html">Help?</a></li>
     </ul>
   </nav>
 
+  <!-- Main Blog Section -->
   <div class="blog-container">
 
-    <!-- 🔍 Search Box -->
+    <!-- Search Box -->
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="🔍 Search blogs by title or content...">
     </div>
 
+    <!-- Blog Post Loop -->
     {% for blog in blogs %}
     <div class="blog-post">
-        <div class="blog-title">{{ blog.title }}</div>
-        <div class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</div>
-        <div class="blog-content">
-            <div class="preview-content">
-                {{ blog.content[:300] }}{% if blog.content|length > 300 %}...{% endif %}
-            </div>
-            {% if blog.content|length > 300 %}
-            <div class="full-content" style="display: none;">
-                {{ blog.content }}
-            </div>
-            <button class="toggle-btn">Read More</button>
-            {% endif %}
+      <div class="blog-title">{{ blog.title }}</div>
+      <div class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</div>
+      <div class="blog-content">
+        <div class="preview-content">
+          {{ blog.content[:300] }}{% if blog.content|length > 300 %}...{% endif %}
         </div>
+        {% if blog.content|length > 300 %}
+        <div class="full-content" style="display: none;">
+          {{ blog.content }}
+        </div>
+        <button class="toggle-btn">Read More</button>
+        {% endif %}
+      </div>
     </div>
     {% endfor %}
+
   </div>
 
-  <footer>
-    <p>&copy; 2025  Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
-  </footer>
+  <!-- Footer -->
+  {% include 'footer.html' %}
 
+
+  <!-- JavaScript for Interactivity -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Read More toggle
-        document.querySelectorAll('.toggle-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const fullContent = this.previousElementSibling;
-                const preview = fullContent.previousElementSibling;
-                if (fullContent.style.display === "none") {
-                    fullContent.style.display = "block";
-                    preview.style.display = "none";
-                    this.innerText = "Show Less";
-                } else {
-                    fullContent.style.display = "none";
-                    preview.style.display = "block";
-                    this.innerText = "Read More";
-                }
-            });
+      // Expand/Collapse blog content
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const fullContent = this.previousElementSibling;
+          const preview = fullContent.previousElementSibling;
+          if (fullContent.style.display === "none") {
+            fullContent.style.display = "block";
+            preview.style.display = "none";
+            this.innerText = "Show Less";
+          } else {
+            fullContent.style.display = "none";
+            preview.style.display = "block";
+            this.innerText = "Read More";
+          }
         });
+      });
 
-        // Search filtering
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', function () {
-            const keyword = this.value.toLowerCase();
-            const posts = document.querySelectorAll('.blog-post');
-            posts.forEach(post => {
-                const title = post.querySelector('.blog-title').innerText.toLowerCase();
-                const content = post.querySelector('.blog-content').innerText.toLowerCase();
-                if (title.includes(keyword) || content.includes(keyword)) {
-                    post.style.display = 'block';
-                } else {
-                    post.style.display = 'none';
-                }
-            });
+      // Blog Search Functionality
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', function () {
+        const keyword = this.value.toLowerCase();
+        const posts = document.querySelectorAll('.blog-post');
+        posts.forEach(post => {
+          const title = post.querySelector('.blog-title').innerText.toLowerCase();
+          const content = post.querySelector('.blog-content').innerText.toLowerCase();
+          if (title.includes(keyword) || content.includes(keyword)) {
+            post.style.display = 'block';
+          } else {
+            post.style.display = 'none';
+          }
         });
+      });
     });
   </script>
+
 </body>
 </html>
