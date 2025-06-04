@@ -40,13 +40,32 @@
 
 <!-- Main Content Area -->
 <div class="container">
-
+  
   <!-- Sidebar Section -->
   <aside class="sidebar">
+    <div>
     <img src="{{ url_for('static', filename='images/kunal.jpg') }}" class="profile-img" alt="Kunal V. Dharme">
     <h2>I'm Kunal V. Dharme,</h2>
     <p>The world's only consulting investigator.<br>
-      Contact me at: <strong>kunaldharme13@gmail.com</strong></p>
+      Contact me at: <strong>kunaldharme13@gmail.com</strong>
+    </p>
+
+    <!-- My Photos Title -->
+    <h3 style="margin-top: 25px; margin-bottom: 10px; text-align: center; color: #0037ff;  margin-top: 50px;">━━━ My Photos ━━━</h3>
+
+    <!-- Photo Collage Preview -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+      {% for photo in photo_list[:4] %}
+        <img src="{{ url_for('static', filename='uploads/' ~ photo) }}" alt="Photo" style="width: 100%; height: 80px; object-fit: cover; border-radius: 6px;">
+      {% endfor %}
+    </div>
+
+    <!-- View More Link -->
+    <div style="text-align: center; margin-top: 8px;">
+      <a href="{{ url_for('photos') }}" style="font-size: 0.9rem; color: #00ffff; text-decoration: none; font-weight: bold;">
+        View More →
+      </a>
+    </div>
   </aside>
 
   <!-- Blog Post Section -->

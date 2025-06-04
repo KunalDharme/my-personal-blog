@@ -28,11 +28,18 @@ app.register_blueprint(admin_routes, url_prefix='/admin')
 # ------------------ Public Routes ------------------
 
 @app.route('/')
-@app.route("/index.html")
+@app.route('/index.html')
 def home():
-    """Homepage showing recent blogs"""
+    """Homepage showing recent blogs and photo previews"""
+
     recent_blogs = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
-    return render_template('index.html', blogs=recent_blogs)
+
+    # Get the list of photo filenames from the upload folder
+    uploads_folder = os.path.join(app.static_folder, 'uploads')
+    photo_list = sorted(os.listdir(uploads_folder), reverse=True)[:4]  # Show latest 4
+
+    return render_template('index.html', blogs=recent_blogs, photo_list=photo_list)
+
 
 @app.route('/blog.html')
 def all_blogs():
