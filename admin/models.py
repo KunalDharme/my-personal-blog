@@ -18,9 +18,9 @@ class AdminUser(db.Model):
 def create_admin():
     from app import db
     db.create_all()
-    if not AdminUser.query.filter_by(username='watson').first():
-        admin = AdminUser(username='watson')
-        admin.set_password('blog221B')
+    if not AdminUser.query.filter_by(username='kunal').first():
+        admin = AdminUser(username='kunal')
+        admin.set_password('13102004')
         db.session.add(admin)
         db.session.commit()
 
