@@ -231,3 +231,10 @@ def delete_comment(comment_id):
     db.session.commit()
     flash('Comment deleted successfully!', 'success')
     return redirect(url_for('admin.view_comments'))
+
+@admin_routes.route('/like/<int:post_id>', methods=['POST'])
+def like_post(post_id):
+    post = BlogPost.query.get_or_404(post_id)
+    post.likes = post.likes + 1 if post.likes else 1
+    db.session.commit()
+    return redirect(request.referrer or url_for('admin.dashboard'))

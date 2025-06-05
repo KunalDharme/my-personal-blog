@@ -62,10 +62,27 @@
 
     <!-- View More Link -->
     <div style="text-align: center; margin-top: 8px;">
-      <a href="{{ url_for('photos') }}" style="font-size: 0.9rem; color: #00ffff; text-decoration: none; font-weight: bold;">
+      <a href="{{ url_for('photos') }}" style="font-size: 0.9rem; color: #5d3100; text-decoration: none; font-weight: bold;">
         View More →
       </a>
     </div>
+
+    <!-- Famous Blogs Title -->
+    <h3 style="margin-top: 30px; margin-bottom: 10px; text-align: center; color: #ff6f00;">━━━ Famous Blogs ━━━</h3>
+
+    <!-- Famous Blog Links -->
+    <ul style="list-style-type: none; padding-left: 0;">
+      {% for blog in famous_blogs %}
+        <li style="margin-bottom: 8px;">
+          <a href="{{ url_for('post', slug=blog.slug) }}" style="text-decoration: none; color: #003b99; font-weight: bold;">
+            {{ blog.title }}
+          </a>
+        </li>
+      {% else %}
+        <li style="text-align: center; color: #888;">No famous blogs yet.</li>
+      {% endfor %}
+    </ul>
+
   </aside>
 
   <!-- Blog Post Section -->
@@ -108,6 +125,12 @@
     {% else %}
     <p>No blog posts yet.</p>
     {% endfor %}
+
+    <div style="text-align: center; margin-top: 8px;">
+      <a href="{{ url_for('all_blogs') }}" style="font-size: 1rem; color: #00550d; text-decoration: none; font-weight: bold;">
+      Click Here To Read More →
+      </a>
+    </div>
   </main>
 
 </div>

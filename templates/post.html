@@ -112,8 +112,26 @@
     </div>
     {% endif %}
 
-    <footer>
-        <p>&copy; 2025 Mr. Kunal V. Dharme. Not affiliated with BBC.</p>
-    </footer>
+<!-- Footer -->
+<footer style="background: linear-gradient(90deg, #04004f, #000000); color: #fff; padding: 30px 20px; text-align: center; font-family: 'Georgia', serif;">
+  <div style="max-width: 900px; margin: auto;">
+    <p style="font-size: 1.2rem; margin-bottom: 10px;">
+      &copy; <span id="year"></span> Mr. Kunal V. Dharme. Not affiliated with BBC.
+    </p>
+    <p style="font-style: italic; color: #b0b0ff; margin-bottom: 20px;">
+      “The Science of Digital Deduction”
+    </p>
+    
+    <p style="margin-top: 25px; font-size: 0.9rem; color: #999;">
+      Built with <span style="color: #ff4da6;">&#10084;&#65039;</span> by Kunal V. Dharme
+    </p>
+  </div>
+  
+
+  <script>
+    // Dynamically update year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</footer>
 </body>
 </html>

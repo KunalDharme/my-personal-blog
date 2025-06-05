@@ -30,6 +30,7 @@ class BlogPost(db.Model):
     slug = db.Column(db.String(100), unique=True, nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    likes = db.Column(db.Integer, default=0) 
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)

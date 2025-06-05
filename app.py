@@ -73,20 +73,25 @@ def photos():
 
 @app.route('/contact.html', methods=['GET', 'POST'])
 def contact():
-    """Contact form handling"""
+    """Contact form handling with basic validation"""
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        message = request.form['message']
+        name = request.form.get('name', '').strip()
+        email = request.form.get('email', '').strip()
+        message = request.form.get('message', '').strip()
+
+        if not name or not email or not message:
+            flash('Please fill out all fields.', 'contact')
+            return redirect(url_for('contact'))
 
         contact_message = ContactMessage(name=name, email=email, message=message)
         db.session.add(contact_message)
         db.session.commit()
 
-        flash('Your message has been sent successfully!', 'success')
+        flash('Your message has been sent successfully!', 'contact')
         return redirect(url_for('contact'))
 
     return render_template('contact.html')
+
 
 @app.route('/help.html')
 def help():
