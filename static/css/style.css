@@ -313,6 +313,7 @@ footer {
 
 .toggle-comment-btn:hover {
   background-color: #ff4da6;
+  border: 1px solid #ff4da6;
   color: #080047;
 }
 

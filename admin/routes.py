@@ -5,21 +5,22 @@ from werkzeug.utils import secure_filename
 from extensions import db 
 from .models import AdminUser, BlogPost, Photo, ContactMessage, Comment
 
-
 admin_routes = Blueprint('admin', __name__, template_folder='templates')
 
-# Use absolute path for uploads folder inside your Flask project
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def admin_login_required():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+    return None
 
 @admin_routes.route('/')
 def admin_root():
     return redirect(url_for('admin.dashboard'))
-
 
 @admin_routes.route('/login', methods=['GET', 'POST'])
 def login():
@@ -38,7 +39,6 @@ def login():
 
     return render_template('admin/login.html')
 
-
 @admin_routes.route('/dashboard')
 def dashboard():
     if not session.get('admin_logged_in'):
@@ -48,13 +48,11 @@ def dashboard():
     recent_posts = BlogPost.query.order_by(BlogPost.created_at.desc()).limit(5).all()
     return render_template('admin/admin_dashboard.html', total_posts=total_posts, recent_posts=recent_posts)
 
-
 @admin_routes.route('/logout')
 def logout():
     session.pop('admin_logged_in', None)
     session.pop('admin_id', None)
     return redirect(url_for('admin.login'))
-
 
 @admin_routes.route('/posts')
 def posts():
@@ -64,6 +62,14 @@ def posts():
     all_posts = BlogPost.query.order_by(BlogPost.created_at.desc()).all()
     return render_template('admin/admin_posts.html', posts=all_posts)
 
+@admin_routes.route('/post/<int:post_id>')
+def view_post(post_id):
+    """
+    View a single post with its comments.
+    """
+    post = BlogPost.query.get_or_404(post_id)
+    comments = Comment.query.filter_by(post_id=post.id).order_by(Comment.created_at.desc()).all()
+    return render_template('admin/view_post.html', post=post, comments=comments)
 
 @admin_routes.route('/post/new', methods=['GET', 'POST'])
 def new_post():
@@ -81,7 +87,6 @@ def new_post():
         return redirect(url_for('admin.posts'))
 
     return render_template('admin/new_post.html')
-
 
 @admin_routes.route('/post/edit/<int:post_id>', methods=['GET', 'POST'])
 def edit_post(post_id):
@@ -101,7 +106,6 @@ def edit_post(post_id):
 
     return render_template('admin/edit_post.html', post=post)
 
-
 @admin_routes.route('/post/delete/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
     if not session.get('admin_logged_in'):
@@ -112,7 +116,6 @@ def delete_post(post_id):
     db.session.commit()
     flash('Post deleted successfully!', 'success')
     return redirect(url_for('admin.posts'))
-
 
 @admin_routes.route('/change-password', methods=['GET', 'POST'])
 def change_password():
@@ -138,7 +141,6 @@ def change_password():
 
     return render_template('admin/change_password.html')
 
-
 @admin_routes.route('/photos', methods=['GET', 'POST'])
 def upload_photos():
     if not session.get('admin_logged_in'):
@@ -155,13 +157,11 @@ def upload_photos():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
 
-            # Ensure UPLOAD_FOLDER exists
             os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
             file_path = os.path.join(UPLOAD_FOLDER, filename)
             file.save(file_path)
 
-            # Save photo record in DB
             photo = Photo(filename=filename)
             db.session.add(photo)
             db.session.commit()
@@ -174,7 +174,6 @@ def upload_photos():
     photos = Photo.query.order_by(Photo.id.desc()).all()
     return render_template('admin/photos.html', photos=photos)
 
-
 @admin_routes.route('/photo/delete/<int:photo_id>', methods=['POST'])
 def delete_photo(photo_id):
     if not session.get('admin_logged_in'):
@@ -182,7 +181,6 @@ def delete_photo(photo_id):
 
     photo = Photo.query.get_or_404(photo_id)
 
-    # Delete file from static/uploads folder
     file_path = os.path.join(current_app.root_path, 'static/uploads', photo.filename)
     if os.path.exists(file_path):
         os.remove(file_path)
@@ -210,17 +208,14 @@ def mark_as_read(message_id):
     db.session.commit()
     return redirect(url_for('admin.view_messages'))
 
-# View all comments (with blog post info)
 @admin_routes.route('/comments')
 def view_comments():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin.login'))
 
-    # Get all comments ordered by newest first
     comments = Comment.query.order_by(Comment.created_at.desc()).all()
     return render_template('admin/comments.html', comments=comments)
 
-# Delete comment by ID
 @admin_routes.route('/comment/delete/<int:comment_id>', methods=['POST'])
 def delete_comment(comment_id):
     if not session.get('admin_logged_in'):
@@ -232,9 +227,33 @@ def delete_comment(comment_id):
     flash('Comment deleted successfully!', 'success')
     return redirect(url_for('admin.view_comments'))
 
+# ----------------------------
+# Like a blog post (admin only)
 @admin_routes.route('/like/<int:post_id>', methods=['POST'])
 def like_post(post_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
     post = BlogPost.query.get_or_404(post_id)
-    post.likes = post.likes + 1 if post.likes else 1
+    post.likes = (post.likes or 0) + 1
     db.session.commit()
+    # Redirect back to where the like was clicked or admin dashboard
     return redirect(request.referrer or url_for('admin.dashboard'))
+
+# Add a comment to a post (admin only)
+@admin_routes.route('/post/<int:post_id>/comment', methods=['POST'])
+def add_comment(post_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin.login'))
+
+    post = BlogPost.query.get_or_404(post_id)
+    content = request.form.get('content', '').strip()
+    if not content:
+        flash('Comment cannot be empty.', 'danger')
+        return redirect(url_for('admin.view_post', post_id=post.id))
+
+    comment = Comment(post_id=post.id, content=content)
+    db.session.add(comment)
+    db.session.commit()
+    flash('Comment added successfully!', 'success')
+    return redirect(url_for('admin.view_post', post_id=post.id))

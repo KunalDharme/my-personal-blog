@@ -50,27 +50,19 @@
       Contact me at: <strong>kunaldharme13@gmail.com</strong>
     </p>
 
-    <!-- My Photos Title -->
-    <h3 style="margin-top: 25px; margin-bottom: 10px; text-align: center; color: #0037ff;  margin-top: 50px;">━━━ My Photos ━━━</h3>
-
-    <!-- Photo Collage Preview -->
+    <h3 style="margin-top: 25px; margin-bottom: 10px; text-align: center; color: #0037ff;">━━━ My Photos ━━━</h3>
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
       {% for photo in photo_list[:4] %}
         <img src="{{ url_for('static', filename='uploads/' ~ photo) }}" alt="Photo" style="width: 100%; height: 80px; object-fit: cover; border-radius: 6px;">
       {% endfor %}
     </div>
-
-    <!-- View More Link -->
     <div style="text-align: center; margin-top: 8px;">
       <a href="{{ url_for('photos') }}" style="font-size: 0.9rem; color: #5d3100; text-decoration: none; font-weight: bold;">
         View More →
       </a>
     </div>
 
-    <!-- Famous Blogs Title -->
     <h3 style="margin-top: 30px; margin-bottom: 10px; text-align: center; color: #ff6f00;">━━━ Famous Blogs ━━━</h3>
-
-    <!-- Famous Blog Links -->
     <ul style="list-style-type: none; padding-left: 0;">
       {% for blog in famous_blogs %}
         <li style="margin-bottom: 8px;">
@@ -82,41 +74,45 @@
         <li style="text-align: center; color: #888;">No famous blogs yet.</li>
       {% endfor %}
     </ul>
-
   </aside>
 
   <!-- Blog Post Section -->
   <main class="blog-posts">
     {% for blog in blogs[:3] %}
     <article>
-      <!-- Blog Title + Like Button -->
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2><a href="{{ url_for('post', slug=blog.slug) }}">{{ blog.title }}</a></h2>
+        <h2>{{ blog.title }}</h2>
         <div>
           <button class="like-btn" onclick="toggleLike(this)" data-slug="{{ blog.slug }}">❤️</button>
           <span class="like-count" id="like-count-{{ blog.slug }}">0</span>
         </div>
       </div>
 
-      <!-- Date and Preview -->
       <p class="date">{{ blog.created_at.strftime('%B %d, %Y') }}</p>
-      <p>{{ blog.content[:150] }}{% if blog.content|length > 150 %}...{% endif %}</p>
+      <p class="blog-preview" id="preview-{{ blog.id }}">
+        {{ blog.content[:150] }}{% if blog.content|length > 150 %}...{% endif %}
+      </p>
 
-      <!-- Approved Comments -->
-      <div class="comments-section">
+      {% if blog.content|length > 150 %}
+        <p class="blog-full-content" id="full-{{ blog.id }}" style="display:none;">
+          {{ blog.content }}
+        </p>
+        <button onclick="toggleFullContent('{{ blog.id }}')" id="btn-{{ blog.id }}" style="border: none; color: rgb(30, 0, 79); margin-top: 18px;">
+          📖 Show More
+        </button>
+      {% endif %}
+
+      <!-- Comments Section -->
+      <div class="comments-section" id="comments-{{ blog.id }}">
         <h4>Comments:</h4>
-        {% for comment in blog.comments if comment.approved %}
-          <p><strong>{{ comment.name }}</strong>: {{ comment.text }}</p>
-        {% else %}
-          <p>No comments yet.</p>
-        {% endfor %}
+        <p>No comments yet.</p>
       </div>
 
-      <!-- Comment Form Toggle -->
+      <!-- Add Comment Button -->
       <button onclick="toggleCommentForm('comment-form-{{ blog.id }}')" class="toggle-comment-btn">💬 Add Comment</button>
 
-      <!-- Hidden Comment Form -->
-      <form id="comment-form-{{ blog.id }}" action="{{ url_for('post', slug=blog.slug) }}" method="post" class="comment-form" style="display: none;">
+      <!-- Comment Form -->
+      <form id="comment-form-{{ blog.id }}" onsubmit="event.preventDefault(); addComment('{{ blog.id }}');" class="comment-form" style="display: none;">
         <input type="text" name="name" placeholder="Your name" required>
         <textarea name="text" placeholder="Write your comment..." required></textarea>
         <button type="submit">Post Comment</button>
@@ -128,21 +124,39 @@
 
     <div style="text-align: center; margin-top: 8px;">
       <a href="{{ url_for('all_blogs') }}" style="font-size: 1rem; color: #00550d; text-decoration: none; font-weight: bold;">
-      Click Here To Read More →
+        Click Here To Read More →
       </a>
     </div>
   </main>
 
 </div>
 
-  <!-- Footer -->
-  {% include 'footer.html' %}
+<!-- Footer -->
+{% include 'footer.html' %}
 
-<!-- Scripts: Like and Comment Toggle -->
+<!-- Scripts -->
 <script>
   function toggleCommentForm(formId) {
     const form = document.getElementById(formId);
     form.style.display = form.style.display === "none" ? "block" : "none";
+  }
+
+  function addComment(blogId) {
+    const form = document.getElementById('comment-form-' + blogId);
+    const name = form.querySelector('input[name="name"]').value;
+    const text = form.querySelector('textarea[name="text"]').value;
+    const commentsDiv = document.getElementById('comments-' + blogId);
+
+    if (name && text) {
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${name}</strong>: ${text}`;
+      if (commentsDiv.querySelector('p')?.textContent === "No comments yet.") {
+        commentsDiv.innerHTML = "<h4>Comments:</h4>";
+      }
+      commentsDiv.appendChild(p);
+      form.reset();
+      form.style.display = "none";
+    }
   }
 
   function toggleLike(button) {
@@ -174,6 +188,22 @@
       document.getElementById('like-count-' + slug).textContent = count;
     });
   });
+
+  function toggleFullContent(id) {
+    const preview = document.getElementById('preview-' + id);
+    const fullContent = document.getElementById('full-' + id);
+    const btn = document.getElementById('btn-' + id);
+
+    if (fullContent.style.display === "none") {
+      fullContent.style.display = "block";
+      preview.style.display = "none";
+      btn.textContent = "⬅️ Show Less";
+    } else {
+      fullContent.style.display = "none";
+      preview.style.display = "block";
+      btn.textContent = "📖 Show More";
+    }
+  }
 </script>
 
 </body>
